@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+*.h5
+*.keras
+*.pkl
+*.zip
+.DS_Store
+*.log

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mobil Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 40px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-top: 20px;
+        }
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+        .preview-img {
+            max-width: 300px;
+            margin: 20px auto;
+            display: block;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .result {
+            font-size: 18px;
+            color: #007BFF;
+            margin-top: 20px;
+        }
+        .btn {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+    <script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function(){
+                const output = document.getElementById('preview');
+                output.src = reader.result;
+                output.style.display = 'block';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+</head>
+<body>
+
+    <h1>Mobil Predictor</h1>
+
+    <form action="/predict" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" onchange="previewImage(event)" required>
+        <br>
+        <img id="preview" class="preview-img" src="#" alt="Preview Gambar" style="display:none;">
+        <br>
+        <button type="submit" class="btn">Prediksi</button>
+    </form>
+
+    {% if filename %}
+        <div>
+            <h3>Gambar yang Diupload:</h3>
+            <img src="{{ url_for('static', filename='uploads/' + filename) }}" class="preview-img">
+        </div>
+    {% endif %}
+
+    {% if prediction %}
+        <div class="result">
+            <strong>Hasil Prediksi:</strong> {{ prediction }}<br>
+            <strong>Confidence:</strong> {{ '%.2f' | format(confidence * 100) }}%
+        </div>
+    {% endif %}
+
+</body>
+</html>
